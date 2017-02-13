@@ -10,6 +10,9 @@ namespace helpers;
  * @author     Tobias Zeising <tobias.zeising@aditu.de>
  */
 class ContentLoader {
+    /** @var \controllers\BaseController */
+    private $controller;
+
     /**
      * @var \daos\Items database access for saving new item
      */
@@ -23,7 +26,8 @@ class ContentLoader {
     /**
      * ctor
      */
-    public function __construct() {
+    public function __construct(\controllers\BaseController $controller) {
+        $this->controller = $controller;
         $this->itemsDao = new \daos\Items();
         $this->sourceDao = new \daos\Sources();
     }
@@ -86,7 +90,7 @@ class ContentLoader {
         \F3::get('logger')->debug('start fetching source "' . $source['title'] . ' (id: ' . $source['id'] . ') ');
 
         // get spout
-        $spoutLoader = new \helpers\SpoutLoader();
+        $spoutLoader = new \helpers\SpoutLoader($this->controller);
         $spout = $spoutLoader->get($source['spout']);
         if ($spout === false) {
             \F3::get('logger')->error('unknown spout: ' . $source['spout']);
@@ -354,7 +358,7 @@ class ContentLoader {
          \F3::get('logger')->debug('Start fetching spout title');
 
          // get spout
-         $spoutLoader = new \helpers\SpoutLoader();
+         $spoutLoader = new \helpers\SpoutLoader($this->controller);
          $spout = $spoutLoader->get($data['spout']);
 
          if ($spout === false) {

@@ -3,6 +3,7 @@
 namespace spouts\twitter;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use GuzzleHttp;
 
 /**
  * Spout for fetching a twitter list
@@ -12,7 +13,9 @@ use Abraham\TwitterOAuth\TwitterOAuth;
  * @author     Nicola Malizia <unnikked@gmail.com>
  */
 class listtimeline extends \spouts\twitter\usertimeline {
-    public function __construct() {
+    public function __construct(GuzzleHttp\Client $httpClient) {
+        parent::__construct($httpClient);
+
         $this->name = 'Twitter - List timeline';
         $this->description = 'The timeline of a given list';
         $this->params = [

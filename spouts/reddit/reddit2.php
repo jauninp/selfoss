@@ -83,7 +83,10 @@ class reddit2 extends \spouts\spout {
     /**
      * loads content for given source
      *
-     * @param string  $url
+     * @param array  $params
+     *
+     * @throws \GuzzleHttp\Exception\RequestException When an error is encountered
+     * @throws \RuntimeException if the response body is not in JSON format
      *
      * @return void
      */
@@ -101,17 +104,14 @@ class reddit2 extends \spouts\spout {
             }
         }
 
-        $json = json_decode($this->file_get_contents_curl('https://www.reddit.com/' . $params['url'] . '.json'));
+        $response = $this->sendRequest('https://www.reddit.com/' . $params['url'] . '.json');
+        $json = $response->json();
 
-        if ($json === null) {
-            throw new \Exception('Cannot parse the response.');
+        if (isset($json['error'])) {
+            throw new \Exception($json['message']);
         }
 
-        if (isset($json->error)) {
-            throw new \Exception($json->message);
-        }
-
-        $this->items = $json->data->children;
+        $this->items = $json['data']['children'];
     }
 
     //
@@ -215,14 +215,16 @@ class reddit2 extends \spouts\spout {
     /**
      * returns the current title as string
      *
+     * @throws \GuzzleHttp\Exception\RequestException When an error is encountered
+     *
      * @return string title
      */
     public function getHtmlUrl() {
         if ($this->items !== null && $this->valid()) {
             if (preg_match('/imgur/', @current($this->items)->data->url)) {
                 if (!preg_match('/\.(?:gif|jpg|png|svg)$/i', @current($this->items)->data->url)) {
-                    $head = $this->get_head(@current($this->items)->data->url . '.jpg');
-                    if (preg_match('/404 Not Found/', $head)) {
+                    $request = $this->sendRequest(@current($this->items)->data->url . '.jpg', 'HEAD');
+                    if (preg_match('/404 Not Found/', $request->getBody())) {
                         return @current($this->items)->data->url . '/embed';
                     }
 
@@ -239,6 +241,8 @@ class reddit2 extends \spouts\spout {
     /**
      * returns the content of this item
      *
+     * @throws \GuzzleHttp\Exception\RequestException When an error is encountered
+     *
      * @return string content
      */
     public function getContent() {
@@ -254,13 +258,9 @@ class reddit2 extends \spouts\spout {
 
             //albums, embeds other strange thigs
             if (preg_match('/embed$/i', $this->getHtmlUrl())) {
-                if (function_exists('curl_init')) {
-                    $content = $this->file_get_contents_curl($this->getHtmlUrl());
-                } else {
-                    $content = @file_get_contents($this->getHtmlUrl());
-                }
+                $response = $this->sendRequest($this->getHtmlUrl());
 
-                return '<a href="' . $this->getHtmlUrl() . '"><img src="' . preg_replace("/s\./", '.', $this->getImage($content)) . '"/></a>';
+                return '<a href="' . $this->getHtmlUrl() . '"><img src="' . preg_replace("/s\./", '.', $this->getImage($response->getBody())) . '"/></a>';
             }
             if ($this->scrape) {
                 if ($contentFromReadability = $this->fetchFromReadability($this->getHtmlUrl())) {
@@ -355,24 +355,24 @@ class reddit2 extends \spouts\spout {
      *
      * @author oxman @github
      *
+     * @throws \GuzzleHttp\Exception\RequestException When an error is encountered
+     * @throws \RuntimeException if the response body is not in JSON format
+     *
      * @return string content
      */
     private function fetchFromReadability($url) {
         if (empty($this->apiKey)) {
             return false;
         }
-        if (function_exists('curl_init')) {
-            $content = $this->file_get_contents_curl('https://readability.com/api/content/v1/parser?token=' . $this->apiKey . '&url=' . urlencode($url));
-        } else {
-            $content = @file_get_contents('https://readability.com/api/content/v1/parser?token=' . $this->apiKey . '&url=' . urlencode($url));
-        }
 
-        $data = json_decode($content);
-        if (isset($data->content) === false) {
+        $response = $this->sendRequest('https://readability.com/api/content/v1/parser?token=' . $this->apiKey . '&url=' . urlencode($url));
+
+        $data = $response->json();
+        if (!isset($data['content'])) {
             return false;
         }
 
-        return $data->content;
+        return $data['content'];
     }
 
     /**
@@ -380,14 +380,13 @@ class reddit2 extends \spouts\spout {
      *
      * @author janeczku @github
      *
+     * @throws \GuzzleHttp\Exception\RequestException When an error is encountered
+     *
      * @return string content
      */
     private function fetchFromInstapaper($url) {
-        if (function_exists('curl_init')) {
-            $content = $this->file_get_contents_curl('https://www.instapaper.com/text?u=' . urlencode($url));
-        } else {
-            $content = @file_get_contents('https://www.instapaper.com/text?u=' . urlencode($url));
-        }
+        $content = $this->sendRequest->get('https://www.instapaper.com/text?u=' . urlencode($url))->getBody();
+
         $dom = new \DOMDocument();
         @$dom->loadHTML($content);
         if (!$dom) {
@@ -398,41 +397,6 @@ class reddit2 extends \spouts\spout {
         $content = $dom->saveXML($elements->item(0), LIBXML_NOEMPTYTAG);
 
         return $content;
-    }
-
-    private function file_get_contents_curl($url) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-        if (!empty($this->reddit_session)) {
-            curl_setopt($ch, CURLOPT_COOKIE, $this->reddit_session);
-        }
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        $data = @curl_exec($ch);
-        curl_close($ch);
-
-        return $data;
-    }
-
-    private function get_head($url) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        // Only calling the head
-        if (!empty($this->reddit_session)) {
-            curl_setopt($ch, CURLOPT_COOKIE, $this->reddit_session);
-        }
-        curl_setopt($ch, CURLOPT_HEADER, true); // header will be at output
-        curl_setopt($ch, CURLOPT_NOBODY, true);
-        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1); // ADD THIS
-
-        curl_setopt($ch, CURLOPT_URL, $url);
-        $data = @curl_exec($ch);
-        curl_close($ch);
-
-        return $data;
     }
 
     /**
@@ -463,32 +427,58 @@ class reddit2 extends \spouts\spout {
         }
     }
 
+    /**
+     * @throws \GuzzleHttp\Exception\RequestException When an error is encountered
+     * @throws \RuntimeException if the response body is not in JSON format
+     * @throws \Exception if the credentials are invalid
+     */
     private function login($params) {
-        $login = sprintf('api_type=json&user=%s&passwd=%s', $params['username'], $params['password']);
-        $ch = curl_init("https://ssl.reddit.com/api/login/{$params['username']}");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $login);
-        $response = curl_exec($ch);
-        $response = json_decode($response);
-        if (curl_errno($ch)) {
-            throw new \Exception(curl_error($ch));
+        $http = $this->getHttpClient();
+        $response = $http->post("https://ssl.reddit.com/api/login/{$params['username']}", [
+            'body' => [
+                'api_type' => 'json',
+                'user' => $params['username'],
+                'passwd' => $params['password']
+            ]
+        ]);
+        $data = $response->json();
+        if (count($data['json']['errors']) > 0) {
+            $errors = '';
+            foreach ($data['json']['errors'] as $error) {
+                $errors .= $error[1] . PHP_EOL;
+            }
+            throw new \Exception($errors);
         } else {
-            curl_close($ch);
-            if (count($response->json->errors) > 0) {
-                $errors = '';
-                foreach ($response->json->errors as $error) {
-                    $errors .= $error[1] . PHP_EOL;
-                }
-                throw new \Exception($errors);
-            } else {
-                $this->reddit_session = "reddit_session={$response->json->data->cookie}";
-                if (function_exists('apc_store')) {
-                    apc_store("{$params['username']}_slefoss_reddit_session", $this->reddit_session, 3600);
-                }
+            $this->reddit_session = $data['json']['data']['cookie'];
+            if (function_exists('apc_store')) {
+                apc_store("{$params['username']}_selfoss_reddit_session", $this->reddit_session, 3600);
             }
         }
+    }
+
+    /**
+     * Send a HTTP request to given URL, possibly with a cookie.
+     *
+     * @param string $url
+     * @param string $method
+     *
+     * @throws \GuzzleHttp\Exception\RequestException When an error is encountered
+     *
+     * @return \GuzzleHttp\Message\Response
+     */
+    private function sendRequest($url, $method = 'GET') {
+        $http = $this->getHttpClient();
+
+        if (isset($this->reddit_session)) {
+            $request = $http->createRequest($method, $url, [
+                'cookies' => ['reddit_session' => $this->reddit_session]
+            ]);
+        } else {
+            $request = $http->createRequest($method, $url);
+        }
+
+        $response = $http->send($request);
+
+        return $response;
     }
 }

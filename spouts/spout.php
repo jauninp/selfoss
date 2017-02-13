@@ -2,6 +2,8 @@
 
 namespace spouts;
 
+use GuzzleHttp;
+
 /**
  * This abstract class defines the interface of a spout (source or plugin)
  * template pattern
@@ -11,6 +13,9 @@ namespace spouts;
  * @author     Tobias Zeising <tobias.zeising@aditu.de>
  */
 abstract class spout implements \Iterator {
+    /** @var GuzzleHttp\Client */
+    private $httpClient;
+
     /** @var string name of source */
     public $name = '';
 
@@ -46,6 +51,10 @@ abstract class spout implements \Iterator {
 
     /** @var ?string title of the spout */
     protected $spoutTitle = null;
+
+    public function __construct(GuzzleHttp\Client $httpClient) {
+        $this->httpClient = $httpClient;
+    }
 
     /**
      * loads content for given source
@@ -161,5 +170,12 @@ abstract class spout implements \Iterator {
      */
     public function getImageHelper() {
         return new \helpers\Image();
+    }
+
+    /**
+     * @return GuzzleHttp\Client
+     */
+    public function getHttpClient() {
+        return $this->httpClient;
     }
 }

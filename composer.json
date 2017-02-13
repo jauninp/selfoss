@@ -5,6 +5,9 @@
     "require": {
         "bcosca/fatfree-core": "^3.6",
         "fossar/twitteroauth-php54": "^0.7.3-beta",
+        "fossar/guzzle-transcoder": "^0.0.3",
+        "guzzlehttp/guzzle": "^5.3",
+        "guzzlehttp/log-subscriber": "^1.0",
         "htmlawed/htmlawed": "^1.1",
         "j0k3r/php-readability": "^1.1.5",
         "linkorb/jsmin-php": "^1.0",

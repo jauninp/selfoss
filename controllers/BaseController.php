@@ -2,6 +2,10 @@
 
 namespace controllers;
 
+use GuzzleHttp;
+use GuzzleHttp\Subscriber\Log\LogSubscriber;
+use Fossar\GuzzleTranscoder\GuzzleTranscoder;
+
 /**
  * Parent Controller
  *
@@ -12,6 +16,9 @@ namespace controllers;
 class BaseController {
     /** @var \helpers\View view helper */
     protected $view;
+
+    /** @var GuzzleHttp\Client */
+    private $httpClient;
 
     /**
      * initialize controller
@@ -58,5 +65,28 @@ class BaseController {
             || $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']
             || $_SERVER['REMOTE_ADDR'] === '127.0.0.1'
             || \F3::get('allow_public_update_access') == 1;
+    }
+
+    /**
+     * Provide a HTTP client for use by spouts
+     *
+     * @return GuzzleHttp\Client
+     */
+    public function getHttpClient() {
+        if (!isset($this->httpClient)) {
+            $version = \F3::get('version');
+            $httpClient = new GuzzleHttp\Client([
+                'defaults' => [
+                    'headers' => [
+                        'User-Agent' => "selfoss/$version (Feed reader; Allow like Gecko)"
+                    ]
+                ]
+            ]);
+            $httpClient->getEmitter()->attach(new GuzzleTranscoder());
+            // $httpClient->getEmitter()->attach(new LogSubscriber());
+            $this->httpClient = $httpClient;
+        }
+
+        return $this->httpClient;
     }
 }

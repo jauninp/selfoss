@@ -11,8 +11,15 @@ namespace helpers;
  * @author     Tobias Zeising <tobias.zeising@aditu.de>
  */
 class SpoutLoader {
+    /** @var \controllers\BaseController */
+    private $controller;
+
     /** @var bool|array array of available spouts */
     public $spouts = false;
+
+    public function __construct(\controllers\BaseController $controller) {
+        $this->controller = $controller;
+    }
 
     /**
      * returns all available spouts
@@ -82,7 +89,7 @@ class SpoutLoader {
 
                         // register widget
                         if ($class->isSubclassOf(new \ReflectionClass($parentclass))) {
-                            $return[$classname] = $class->newInstance();
+                            $return[$classname] = $class->newInstance($this->controller->getHttpClient());
                         }
                     }
                 }

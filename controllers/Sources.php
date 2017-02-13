@@ -20,7 +20,7 @@ class Sources extends BaseController {
         $this->needsLoggedIn();
 
         // get available spouts
-        $spoutLoader = new \helpers\SpoutLoader();
+        $spoutLoader = new \helpers\SpoutLoader($this);
         $this->view->spouts = $spoutLoader->all();
 
         // load sources
@@ -48,7 +48,7 @@ class Sources extends BaseController {
     public function add() {
         $this->needsLoggedIn();
 
-        $spoutLoader = new \helpers\SpoutLoader();
+        $spoutLoader = new \helpers\SpoutLoader($this);
         $this->view->spouts = $spoutLoader->all();
         echo $this->view->render('templates/source.phtml');
     }
@@ -66,7 +66,7 @@ class Sources extends BaseController {
             $this->view->error('no spout type given');
         }
 
-        $spoutLoader = new \helpers\SpoutLoader();
+        $spoutLoader = new \helpers\SpoutLoader($this);
 
         $spout = str_replace('_', '\\', $_GET['spout']);
         $this->view->spout = $spoutLoader->get($spout);
@@ -137,7 +137,7 @@ class Sources extends BaseController {
         $data['spout'] = str_replace('_', '\\', $data['spout']);
         if (!isset($data['title']) || strlen(trim($data['title'])) === 0) {
             // try to fetch title, if it is not filled in
-            $loader = new \helpers\ContentLoader();
+            $loader = new \helpers\ContentLoader($this);
             $title = $loader->fetchTitle($data);
 
             if ($title) {
@@ -170,7 +170,7 @@ class Sources extends BaseController {
 
         // load password value if not changed for spouts containing passwords
         if ($sourceExists) {
-            $spoutLoader = new \helpers\SpoutLoader();
+            $spoutLoader = new \helpers\SpoutLoader($this);
             $spoutInstance = $spoutLoader->get($spout);
 
             foreach ($spoutInstance->params as $spoutParamName => $spoutParam) {
@@ -286,7 +286,7 @@ class Sources extends BaseController {
         }
 
         // update the feed
-        $loader = new \helpers\ContentLoader();
+        $loader = new \helpers\ContentLoader($this);
         $loader->updateSingle($id);
         echo 'finished';
     }
@@ -322,7 +322,7 @@ class Sources extends BaseController {
     public function spouts() {
         $this->needsLoggedIn();
 
-        $spoutLoader = new \helpers\SpoutLoader();
+        $spoutLoader = new \helpers\SpoutLoader($this);
         $spouts = $spoutLoader->all();
         $this->view->jsonSuccess($spouts);
     }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2bf1989e52bc4020eba69eb79d740c67",
+    "content-hash": "2ab29e8ed0978baaa96eb3798844955d",
     "packages": [
         {
             "name": "bcosca/fatfree-core",
@@ -36,6 +36,109 @@
             "description": "A powerful yet easy-to-use PHP micro-framework designed to help you build dynamic and robust Web applications - fast!",
             "homepage": "http://fatfreeframework.com/",
             "time": "2016-11-19T13:22:46+00:00"
+        },
+        {
+            "name": "ddeboer/transcoder",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ddeboer/transcoder.git",
+                "reference": "8781195ad1334add26dca66a4a823b7973639754"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ddeboer/transcoder/zipball/8781195ad1334add26dca66a4a823b7973639754",
+                "reference": "8781195ad1334add26dca66a4a823b7973639754",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "suggest": {
+                "ext-iconv": "For using the IconvTranscoder",
+                "ext-mbstring": "For using the MbTranscoder"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ddeboer\\Transcoder\\": "src/",
+                    "Ddeboer\\Transcoder\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David de Boer",
+                    "email": "david@ddeboer.nl"
+                },
+                {
+                    "name": "Community contributors",
+                    "homepage": "https://github.com/ddeboer/transcoder/graphs/contributors"
+                }
+            ],
+            "description": "Better encoding conversion for PHP",
+            "keywords": [
+                "charset",
+                "encoding",
+                "iconv",
+                "iso",
+                "mb",
+                "multibyte",
+                "utf-8"
+            ],
+            "time": "2015-01-23T14:32:33+00:00"
+        },
+        {
+            "name": "fossar/guzzle-transcoder",
+            "version": "0.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fossar/guzzle-transcoder.git",
+                "reference": "f14ed81f4d3adf879a5386d2ca38b2cd98d2d8fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fossar/guzzle-transcoder/zipball/f14ed81f4d3adf879a5386d2ca38b2cd98d2d8fa",
+                "reference": "f14ed81f4d3adf879a5386d2ca38b2cd98d2d8fa",
+                "shasum": ""
+            },
+            "require": {
+                "ddeboer/transcoder": "^1.0",
+                "guzzlehttp/guzzle": "^5.3"
+            },
+            "require-dev": {
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
+                "phpunit/phpunit": "~5 || ~4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fossar\\GuzzleTranscoder\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Tojnar",
+                    "email": "jtojnar@gmail.com"
+                }
+            ],
+            "description": "Guzzle plugin that converts responses to UTF-8",
+            "time": "2017-02-13T10:17:15+00:00"
         },
         {
             "name": "fossar/twitteroauth-php54",
@@ -92,6 +195,212 @@
             "time": "2017-02-13T19:10:28+00:00"
         },
         {
+            "name": "guzzlehttp/guzzle",
+            "version": "5.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/guzzle.git",
+                "reference": "70f1fa53b71c4647bf2762c09068a95f77e12fb8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/70f1fa53b71c4647bf2762c09068a95f77e12fb8",
+                "reference": "70f1fa53b71c4647bf2762c09068a95f77e12fb8",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/ringphp": "^1.1",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "phpunit/phpunit": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Guzzle is a PHP HTTP client library and framework for building RESTful web service clients",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "client",
+                "curl",
+                "framework",
+                "http",
+                "http client",
+                "rest",
+                "web service"
+            ],
+            "time": "2016-07-15T19:28:39+00:00"
+        },
+        {
+            "name": "guzzlehttp/log-subscriber",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/log-subscriber.git",
+                "reference": "99c3c0004165db721d8ef7bbef60c996210e538a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/log-subscriber/zipball/99c3c0004165db721d8ef7bbef60c996210e538a",
+                "reference": "99c3c0004165db721d8ef7bbef60c996210e538a",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~4.0 | ~5.0",
+                "php": ">=5.4.0",
+                "psr/log": "~1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Subscriber\\Log\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Logs HTTP requests and responses as they are sent over the wire (Guzzle 4+)",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "Guzzle",
+                "log",
+                "plugin"
+            ],
+            "time": "2014-10-13T03:31:43+00:00"
+        },
+        {
+            "name": "guzzlehttp/ringphp",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/RingPHP.git",
+                "reference": "dbbb91d7f6c191e5e405e900e3102ac7f261bc0b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/RingPHP/zipball/dbbb91d7f6c191e5e405e900e3102ac7f261bc0b",
+                "reference": "dbbb91d7f6c191e5e405e900e3102ac7f261bc0b",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/streams": "~3.0",
+                "php": ">=5.4.0",
+                "react/promise": "~2.0"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "phpunit/phpunit": "~4.0"
+            },
+            "suggest": {
+                "ext-curl": "Guzzle will use specific adapters if cURL is present"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Ring\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Provides a simple API and specification that abstracts away the details of HTTP into a single PHP function.",
+            "time": "2015-05-20T03:37:09+00:00"
+        },
+        {
+            "name": "guzzlehttp/streams",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/streams.git",
+                "reference": "47aaa48e27dae43d39fc1cea0ccf0d84ac1a2ba5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/streams/zipball/47aaa48e27dae43d39fc1cea0ccf0d84ac1a2ba5",
+                "reference": "47aaa48e27dae43d39fc1cea0ccf0d84ac1a2ba5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Stream\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Provides a simple abstraction over streams of data",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "Guzzle",
+                "stream"
+            ],
+            "time": "2014-10-12T19:18:40+00:00"
+        },
+        {
             "name": "htmlawed/htmlawed",
             "version": "1.1.22",
             "source": {
@@ -139,16 +448,16 @@
         },
         {
             "name": "j0k3r/php-readability",
-            "version": "1.1.5",
+            "version": "1.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/j0k3r/php-readability.git",
-                "reference": "a505a13d0ca972a115411504248fc4506ddaece9"
+                "reference": "445b889efb19139ce616dfea8559934a0c31088d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/j0k3r/php-readability/zipball/a505a13d0ca972a115411504248fc4506ddaece9",
-                "reference": "a505a13d0ca972a115411504248fc4506ddaece9",
+                "url": "https://api.github.com/repos/j0k3r/php-readability/zipball/445b889efb19139ce616dfea8559934a0c31088d",
+                "reference": "445b889efb19139ce616dfea8559934a0c31088d",
                 "shasum": ""
             },
             "require": {
@@ -203,7 +512,7 @@
                 "extraction",
                 "html"
             ],
-            "time": "2017-01-14T16:09:58+00:00"
+            "time": "2017-02-02T15:12:48+00:00"
         },
         {
             "name": "linkorb/jsmin-php",
@@ -532,6 +841,49 @@
             "time": "2016-10-10T12:19:37+00:00"
         },
         {
+            "name": "react/promise",
+            "version": "v2.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/promise.git",
+                "reference": "2760f3898b7e931aa71153852dcd48a75c9b95db"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/2760f3898b7e931aa71153852dcd48a75c9b95db",
+                "reference": "2760f3898b7e931aa71153852dcd48a75c9b95db",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "React\\Promise\\": "src/"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Sorgalla",
+                    "email": "jsorgalla@gmail.com"
+                }
+            ],
+            "description": "A lightweight implementation of CommonJS Promises/A for PHP",
+            "keywords": [
+                "promise",
+                "promises"
+            ],
+            "time": "2016-12-22T14:09:01+00:00"
+        },
+        {
             "name": "simplepie/simplepie",
             "version": "1.4.3",
             "source": {
@@ -628,16 +980,16 @@
         },
         {
             "name": "willwashburn/phpamo",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/willwashburn/phpamo.git",
-                "reference": "f89734acf7ff9b0bc49d3acfe64a93705527eef3"
+                "reference": "4c8e579bc9be5d8eabc06ed4de22235386b2dbf1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/willwashburn/phpamo/zipball/f89734acf7ff9b0bc49d3acfe64a93705527eef3",
-                "reference": "f89734acf7ff9b0bc49d3acfe64a93705527eef3",
+                "url": "https://api.github.com/repos/willwashburn/phpamo/zipball/4c8e579bc9be5d8eabc06ed4de22235386b2dbf1",
+                "reference": "4c8e579bc9be5d8eabc06ed4de22235386b2dbf1",
                 "shasum": ""
             },
             "require": {
@@ -673,7 +1025,7 @@
                 "tls",
                 "tls proxy"
             ],
-            "time": "2016-02-20T05:25:18+00:00"
+            "time": "2017-01-30T13:21:01+00:00"
         }
     ],
     "packages-dev": [],
