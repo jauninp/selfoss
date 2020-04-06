@@ -1,9 +1,7 @@
 <?php
 
 chdir(__DIR__);
-require __DIR__ . '/common.php';
-
-$f3->set('FTRSS_DATA_DIR', __DIR__ . '/data/fulltextrss');
+require __DIR__ . '/src/common.php';
 
 $loader = new \helpers\ContentLoader();
 $loader->update();
